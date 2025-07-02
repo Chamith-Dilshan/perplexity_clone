@@ -2,22 +2,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SideBarState {
   final bool isOpen;
-  final int? extraInt;
-  final String? extraString;
+  // final int? extraInt;
+  // final String? extraString;
 
-  SideBarState({required this.isOpen, this.extraInt, this.extraString});
-  
+  SideBarState({
+    required this.isOpen,
+    //  this.extraInt, this.extraString
+  });
+
   SideBarState copyWith({required bool isOpen}) {
     return SideBarState(
       isOpen: isOpen,
-      extraInt: this.extraInt,
-      extraString: this.extraString,
+      // extraInt: this.extraInt,
+      // extraString: this.extraString,
     );
   }
-
 }
 
-class SideBarStateNotifier extends Notifier<SideBarState> {
+class SideBarNotifier extends AutoDisposeNotifier<SideBarState> {
   @override
   SideBarState build() => SideBarState(isOpen: false); // Default state
 
@@ -30,6 +32,6 @@ class SideBarStateNotifier extends Notifier<SideBarState> {
   }
 }
 
-final sideBarStateNotifierProvider =
-    NotifierProvider<SideBarStateNotifier, SideBarState>(
-      SideBarStateNotifier.new);
+final sideBarNotifierProvider = NotifierProvider.autoDispose<SideBarNotifier, SideBarState>(
+  SideBarNotifier.new,
+);
