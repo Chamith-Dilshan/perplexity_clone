@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:perplexity_clone/pages/chat_page.dart';
 import 'package:perplexity_clone/pages/home_page.dart';
 import 'package:perplexity_clone/theme/colors.dart';
 
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme),
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.submitButton),
       ),
-      home: const HomePage(),
+      home: const ChatPage(question: "hello"),
     );
   }
 }
