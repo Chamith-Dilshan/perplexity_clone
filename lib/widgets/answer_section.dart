@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gpt_markdown/gpt_markdown.dart';
+import 'package:perplexity_clone/services/chat_web_service.dart';
 import 'package:perplexity_clone/theme/colors.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class AnswerSection extends StatefulWidget {
   const AnswerSection({super.key});
@@ -10,6 +12,7 @@ class AnswerSection extends StatefulWidget {
 }
 
 class _AnswerSectionState extends State<AnswerSection> {
+  bool isLoading = true;
   String fullResponse = '''
 ## Easy Cocktails to Make at Home
 
@@ -125,8 +128,23 @@ These recipes are quick, require minimal ingredients, and are perfect for beginn
 [19] https://www.taste.com.au/galleries/simple-cocktail-recipes-always-impress/thx3esmn
 [20] https://www.socialandcocktail.co.uk/cocktail-recipes/
 ''';
-
   final answerAnimationController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    ChatWebService().contentStream.listen((data) {
+      if (data['data'] != null) {
+        if (isLoading) {
+          fullResponse = '';
+        }
+        setState(() {
+          fullResponse += data['data'];
+          isLoading = false;
+        });
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -142,12 +160,15 @@ These recipes are quick, require minimal ingredients, and are perfect for beginn
         AnimatedBuilder(
           animation: answerAnimationController,
           builder: (context, _) {
-            return GptMarkdown(
-              fullResponse,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: AppColors.textGrey,
+            return Skeletonizer(
+              enabled: isLoading,
+              child: GptMarkdown(
+                fullResponse,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.textGrey,
+                ),
               ),
             );
           },

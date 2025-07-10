@@ -32,9 +32,11 @@ class ChatWebService {
 
     _socketChannel!.stream.listen((message) {
       final data = json.decode(message);
-      if(data['type'] == 'search_result') {
+      if(data['type'] == 'search_results') {
+        print('Search results received: ${data['data']}');
         _searchResutlController.add(data);
       } else if(data['type'] == 'content') {
+        print('Content received: ${data['data']}');
         _contentController.add(data);
       }
       // log('Received message: ${data['type']} - ${data['data']}');
